@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "LazyScroll",
+    "version": "0.1.0",
+    "description": "Automatically skip YouTube Shorts after watching 80% of the video",
+    "permissions": [
+        "storage"
+    ],
+    "host_permissions": [
+        "*://www.youtube.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "*://www.youtube.com/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "action": {
+        "default_popup": "index.html",
+        "default_title": "LazyScroll"
+    }
+}

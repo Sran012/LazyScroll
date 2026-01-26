@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:extension": "npm run build && sed -i 's/ crossorigin//g' dist/index.html && echo 'Extension built successfully! Load /dist folder as unpacked extension in Chrome.'",
     "lint": "eslint .",
     "preview": "vite preview"
   },
