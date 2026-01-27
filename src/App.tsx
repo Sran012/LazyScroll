@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [enabled, setEnabled] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   
 
@@ -23,7 +23,7 @@ useEffect(() => {
               setError("Extension not ready - please reload extension");
             } else {
               setEnabled(res.enabled);
-              setError(null);
+              setError(undefined);
             }
           }
         );
@@ -43,7 +43,7 @@ useEffect(() => {
     
     // Optimistic update
     setEnabled(newEnabled);
-    setError(null);
+    setError(undefined);
 
     try {
       chrome.runtime.sendMessage(
@@ -53,10 +53,10 @@ useEffect(() => {
             console.error("Message error:", chrome.runtime.lastError);
             // Revert on error
             setEnabled(!newEnabled);
-            setError(chrome.runtime.lastError.message);
+            setError(chrome.runtime.lastError.message || "Unknown error");
           } else {
             setEnabled(res.enabled);
-            setError(null);
+            setError(undefined);
           }
         }
       );
