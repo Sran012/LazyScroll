@@ -25,6 +25,9 @@
     ],
     "action": {
         "default_popup": "index.html",
-        "default_title": "LazyScroll"
+        "default_title": "LazyScroll",
+        "default_icon": {
+            "32": "icons/favicon.ico"
+        }
     }
 }
