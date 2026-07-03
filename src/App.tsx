@@ -12,6 +12,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    let isMounted = true;
+
     const initExtension = () => {
       // In a real environment, we'd check chrome.runtime
       if (typeof chrome === 'undefined' || !chrome.runtime) {
@@ -24,6 +26,15 @@ export default function App() {
 
       setTimeout(() => {
         chrome.storage.local.get(['enabled'], (result) => {
+          if (!isMounted) {
+            return;
+          }
+
+          if (chrome.runtime.lastError) {
+            setError("Storage Read Failed");
+            return;
+          }
+
           const isEnabled = (result.enabled !== undefined) ? (result.enabled as boolean) : true;
           setEnabled(isEnabled);
           setError(undefined);
@@ -32,6 +43,10 @@ export default function App() {
     };
 
     initExtension();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const toggle = () => {
