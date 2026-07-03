@@ -11,24 +11,3 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-    console.log("Background received message:", msg);
-
-    if (msg.type === "GET_STATUS") {
-        chrome.storage.local.get(['enabled'], (result) => {
-            const enabled = result.enabled ?? true;
-            console.log("Sending status:", { enabled });
-            sendResponse({ enabled });
-        });
-        return true;
-    }
-
-    if (msg.type === "SET_STATUS") {
-        const enabled = msg.enabled ?? false;
-        chrome.storage.local.set({ enabled }, () => {
-            console.log("Updated status to:", enabled);
-            sendResponse({ enabled });
-        });
-        return true;
-    }
-});
