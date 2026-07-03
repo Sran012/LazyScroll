@@ -1,3 +1,3 @@
 # LazyScroll
 
-It is a browser extension for auto scrolling short videos while eating or doing something without touching your keyboard or mouse.
+It is a browser extension that automatically skips YouTube Shorts after you have watched most of the video.

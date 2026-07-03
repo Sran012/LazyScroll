@@ -16,7 +16,7 @@
 
 ## Files Structure
 
-- `background.ts` - Service worker for extension state management
-- `content.ts` - Content script injected into YouTube pages
+- `public/background.js` - Service worker for extension state management
+- `public/content.js` - Content script injected into YouTube pages
 - `src/App.tsx` - React popup UI
-- `manifest.json` - Extension configuration
+- `public/manifest.json` - Extension configuration
