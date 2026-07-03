@@ -8,12 +8,20 @@ let hasSkipped = false;
 let enabled = true;
 let isSkipping = false;
 
+function isShortsPage() {
+    return window.location.pathname.startsWith('/shorts/');
+}
+
 function getShortIdFromUrl() {
     const match = window.location.href.match(/\/shorts\/([a-zA-Z0-9_-]+)/);
     return match ? match[1] : null;
 }
 
 function detectVideo() {
+    if (!isShortsPage()) {
+        return;
+    }
+
     const videos = document.querySelectorAll("video");
     const newShortId = getShortIdFromUrl();
 
@@ -66,7 +74,7 @@ window.addEventListener('yt-navigate-finish', () => {
 });
 
 function goToNextShort() {
-    if (isSkipping) return;
+    if (isSkipping || !isShortsPage()) return;
     isSkipping = true;
 
     console.log("Attempting to skip to next short...");
@@ -122,7 +130,7 @@ function goToNextShort() {
 }
 
 setInterval(() => {
-    if (!activeVideo || !activeVideo.duration) return;
+    if (!isShortsPage() || !activeVideo || !activeVideo.duration) return;
 
     const progress = activeVideo.currentTime / activeVideo.duration;
 
