@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 export default function App() {
   const [enabled, setEnabled] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [error, setError] = useState<string | undefined>(undefined);
   const [bootSequence, setBootSequence] = useState(true);
 
@@ -30,17 +29,6 @@ export default function App() {
           setError(undefined);
         });
       }, 100);
-
-      // Get voice enabled status from storage
-      chrome.storage.local.get(['voiceEnabled'], (result) => {
-        if (result.voiceEnabled !== undefined) {
-          setVoiceEnabled(result.voiceEnabled as boolean);
-        } else {
-          // Set default to true
-          chrome.storage.local.set({ voiceEnabled: true });
-          setVoiceEnabled(true);
-        }
-      });
     };
 
     initExtension();
@@ -63,12 +51,6 @@ export default function App() {
         setError("Storage Failed");
       }
     });
-  };
-
-  const toggleVoice = () => {
-    const newVoiceEnabled = !voiceEnabled;
-    setVoiceEnabled(newVoiceEnabled);
-    chrome.storage.local.set({ voiceEnabled: newVoiceEnabled });
   };
 
   if (bootSequence) {
@@ -109,26 +91,6 @@ export default function App() {
             }`}>
             {enabled ? "ACTIVE" : "STANDBY"}
           </div>
-        </div>
-
-        {/* Voice Command Indicator */}
-        <div className="text-center space-y-2">
-          <div className="text-xs tracking-[0.3em] text-white/50 uppercase">Voice Control</div>
-          <button
-            onClick={toggleVoice}
-            className={`px-4 py-2 rounded text-sm font-bold tracking-wider transition-all duration-300 ${
-              voiceEnabled
-                ? "bg-gaming-red text-black shadow-[0_0_15px_rgba(255,51,51,0.5)]"
-                : "bg-white/10 text-white/60 hover:bg-white/20"
-            }`}
-          >
-            {voiceEnabled ? "🎤 LISTENING" : "🔇 MUTED"}
-          </button>
-          {voiceEnabled && (
-            <div className="text-[10px] text-white/40 mt-1">
-              Say <span className="text-gaming-red font-bold">"next"</span> or <span className="text-gaming-red font-bold">"prev"</span>
-            </div>
-          )}
         </div>
 
         {/* The Button */}

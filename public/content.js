@@ -6,7 +6,7 @@ let activeVideo = null;
 let currentShortId = null;
 let hasSkipped = false;
 let enabled = true;
-let isSkipping = false; // Add safe lock
+let isSkipping = false;
 
 function getShortIdFromUrl() {
     const match = window.location.href.match(/\/shorts\/([a-zA-Z0-9_-]+)/);
