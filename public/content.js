@@ -84,7 +84,7 @@ window.addEventListener('yt-navigate-finish', () => {
 });
 
 function goToNextShort() {
-    if (isSkipping || !isShortsPage()) return;
+    if (isSkipping || !isShortsPage()) return false;
     isSkipping = true;
 
     console.log("Attempting to skip to next short...");
@@ -94,7 +94,7 @@ function goToNextShort() {
     if (downButton) {
         console.log("Clicking down navigation button");
         downButton.click();
-        return;
+        return true;
     }
 
     // Method 2: Try to find any down/next button
@@ -103,7 +103,7 @@ function goToNextShort() {
         if (btn.offsetParent !== null) {
             console.log("Clicking next button:", btn);
             btn.click();
-            return;
+            return true;
         }
     }
 
@@ -118,25 +118,13 @@ function goToNextShort() {
                 bubbles: true,
                 detail: { actionName: 'yt-next-continuation-item' }
             }));
+            return true;
         }
     }
 
-    // Method 4: Fallback - simulate keyboard
-    console.log("Using keyboard fallback");
-    const shortsPlayer = document.querySelector('ytd-shorts, #shorts-player');
-    if (shortsPlayer) {
-        shortsPlayer.focus();
-    }
-
-    document.dispatchEvent(new KeyboardEvent("keydown", {
-        key: "ArrowDown",
-        code: "ArrowDown",
-        keyCode: 40,
-        which: 40,
-        bubbles: true,
-        cancelable: true,
-        view: window
-    }));
+    console.warn("Unable to find a reliable next-short control; will retry on the next interval.");
+    isSkipping = false;
+    return false;
 }
 
 setInterval(() => {
@@ -151,9 +139,8 @@ setInterval(() => {
 
     if (progress > 0.8 && !hasSkipped && !isSkipping) {
         if (enabled) {
-            hasSkipped = true;
             console.log(">> SKIPPING SHORT (80% reached) <<");
-            goToNextShort();
+            hasSkipped = goToNextShort();
         } else {
             // Avoid spamming the "disabled" log
             if (!hasSkipped) {
