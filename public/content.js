@@ -8,6 +8,13 @@ let hasSkipped = false;
 let enabled = true;
 let isSkipping = false;
 
+function resetPlaybackState() {
+    activeVideo = null;
+    currentShortId = null;
+    hasSkipped = false;
+    isSkipping = false;
+}
+
 function isShortsPage() {
     return window.location.pathname.startsWith('/shorts/');
 }
@@ -19,6 +26,7 @@ function getShortIdFromUrl() {
 
 function detectVideo() {
     if (!isShortsPage()) {
+        resetPlaybackState();
         return;
     }
 
@@ -42,6 +50,8 @@ function detectVideo() {
             return;
         }
     }
+
+    resetPlaybackState();
 }
 
 setInterval(detectVideo, 500);
@@ -65,7 +75,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 // Listen for YouTube's internal navigation events
 window.addEventListener('yt-navigate-start', () => {
     console.log("YouTube navigation started");
-    isSkipping = false;
+    resetPlaybackState();
 });
 
 window.addEventListener('yt-navigate-finish', () => {
